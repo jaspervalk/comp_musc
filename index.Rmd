@@ -1,0 +1,41 @@
+---
+title: "My Title"
+author: "Jasper Valk"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(flexdashboard)
+```
+
+### visualisation of the AI song contest
+
+```{r}
+aisc2024 <- read_csv("/Users/jaspervalk/Documents/comp_musc/aisc2024.csv")
+
+
+aisc2024 |> ggplot(aes(x = tempo)) + geom_histogram(binwidth = 10)
+
+```
+```{r}
+
+ggplot(aisc2024, aes(x = tempo, y = arousal, size = instrumentalness, colour = danceability)) +
+  geom_point(alpha = 0.7) +  
+  scale_colour_viridis_c() +  
+  theme_minimal() +          
+  labs(
+    x = "Tempo",
+    y = "Arousal",
+    size = "Instrumentalness",
+    colour = "Danceability"
+  )
+
+
+```
+
+***
+
+This is a bubble-plot showing on tje x-axis the "Tempo" of a song and on the y-axis the "Arousal". The size of the bubbles determine the amount of instrumentalness of the songs. The colour of bubbles say something about the danceability. blue indicates more danceable and yellow indicating less danceable.
