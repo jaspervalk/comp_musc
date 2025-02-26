@@ -6,36 +6,74 @@ output:
     storyboard: true
 ---
 
-```{r setup, include=FALSE}
+```{r}
 library(tidyverse)
 library(flexdashboard)
+library(plotly)
+source("compmus.R")
 ```
 
-### visualisation of the AI song contest
+### Visualization of the AI song contest
 
 ```{r}
-aisc2024 <- read_csv("/Users/jaspervalk/Documents/comp_musc/aisc2024.csv")
-
-
-aisc2024 |> ggplot(aes(x = tempo)) + geom_histogram(binwidth = 10)
-
+"features/jasper-v-2.json" |>                           # Change the track
+  compmus_mfccs(norm = "euclidean") |>                  # Change the norm
+  ggplot(aes(x = time, y = mfcc, fill = value)) + 
+  geom_raster() +
+  scale_y_continuous(
+    breaks = 0:12,
+    minor_breaks = NULL,
+  ) +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = "Coefficient Number", fill = NULL) +
+  theme_classic()   
 ```
+
+### other viz
+
 ```{r}
-
-ggplot(aisc2024, aes(x = tempo, y = arousal, size = instrumentalness, colour = danceability)) +
-  geom_point(alpha = 0.7) +  
-  scale_colour_viridis_c() +  
-  theme_minimal() +          
-  labs(
-    x = "Tempo",
-    y = "Arousal",
-    size = "Instrumentalness",
-    colour = "Danceability"
-  )
-
-
+"features/jasper-v-1.json" |>                           # Change the track
+  compmus_mfccs(norm = "identity") |>                  # Change the norm
+  ggplot(aes(x = time, y = mfcc, fill = value)) + 
+  geom_raster() +
+  scale_y_continuous(
+    breaks = 0:12,
+    minor_breaks = NULL,
+  ) +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = "Coefficient Number", fill = NULL) +
+  theme_classic()   
 ```
 
-***
+### newww vizzz
 
-This is a bubble-plot showing on tje x-axis the "Tempo" of a song and on the y-axis the "Arousal". The size of the bubbles determine the amount of instrumentalness of the songs. The colour of bubbles say something about the danceability. blue indicates more danceable and yellow indicating less danceable.
+```{r}
+"features/jasper-v-1.json" |>                           # Change the track
+  compmus_chroma(norm = "euclidean") |>                 # Change the norm
+  compmus_self_similarity(
+    feature = pc,
+    distance = "euclidean"                             # Change the distance
+  ) |>   
+  ggplot(aes(x = xtime, y = ytime, fill = d)) + 
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic()  
+
+```
+### another one
+
+```{r}
+"features/jasper-v-2.json" |>                           # Change the track
+  compmus_chroma(norm = "identity") |>                 # Change the norm
+  compmus_self_similarity(
+    feature = pc,
+    distance = "euclidean"                             # Change the distance
+  ) |>   
+  ggplot(aes(x = xtime, y = ytime, fill = d)) + 
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic()
+```
+
