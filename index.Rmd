@@ -17,17 +17,21 @@ source("compmus.R")
 
 ```{r}
 "features/jasper-v-2.json" |>                           # Change the track
-  compmus_mfccs(norm = "euclidean") |>                  # Change the norm
-  ggplot(aes(x = time, y = mfcc, fill = value)) + 
+  compmus_chroma(norm = "euclidean") |>                 # Change the norm
+  compmus_self_similarity(
+    feature = pc,
+    distance = "angular"                             # Change the distance
+  ) |>   
+  ggplot(aes(x = xtime, y = ytime, fill = d)) + 
   geom_raster() +
-  scale_y_continuous(
-    breaks = 0:12,
-    minor_breaks = NULL,
-  ) +
   scale_fill_viridis_c(guide = "none") +               # Change the colours?
-  labs(x = "Time (s)", y = "Coefficient Number", fill = NULL) +
-  theme_classic()   
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic()
 ```
+
+***
+
+This is a self-similarity matrix of my second song. For the norm i have chosen euclidean with a angular distance. I've chosen these variables because of the you can clearly see al the patterns in the songs very well. The rythem of the song is clearly visable. For the song i have chosen my second uploaded song; "Hey Joe" from Jimi Hendrix. 
 
 ### other viz
 
