@@ -84,7 +84,9 @@ This is a self-similarity matrix of my second song. For the norm i have chosen e
   theme_classic()                                      # Change the theme?
 ```
 
-### keygram of "Hey joe" - Jimi Hendrix
+### Week 10
+
+#### keygram of "Hey joe" - Jimi Hendrix
 
 ```{r}
 #      C     C#    D     Eb    E     F     F#    G     Ab    A     Bb    B
@@ -183,7 +185,7 @@ key_templates <-
   theme_classic()                                      # Change the theme?
 ```
 
-### Keygram of AI-genarated jazz song
+#### Keygram of AI-genarated jazz song
 
 ```{r}
 "features/jasper-v-1.json" |> 
@@ -199,10 +201,11 @@ key_templates <-
   labs(x = "Time (s)", y = "Keygram 'AI jazz'", fill = NULL) +
   theme_classic() 
 ```
-### Chordogram of "Hey Joe" - jimi Hendrix
+
+#### Chordogram of "Hey Joe" - jimi Hendrix
 
 ```{r}
-"features/jasper-v-2.json" |> 
+"features/jasper-v-1.json" |> 
   compmus_chroma(norm = "identity") |> 
   compmus_match_pitch_templates(
     chord_templates,         # Change to chord_templates if desired
@@ -216,7 +219,7 @@ key_templates <-
   theme_classic()
 ```
 
-### Chordogram of AI-generated Jazz song
+#### Chordogram of AI-generated Jazz song
 
 ```{r}
 "features/jasper-v-1.json" |> 
