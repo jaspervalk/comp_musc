@@ -64,6 +64,9 @@ This is a self-similarity matrix of my second song. For the norm i have chosen e
   labs(x = "Time (s)", y = NULL, fill = NULL) +
   theme_classic()
 ```
+
+### key viz
+
 ```{r}
 
 "features/jasper-v-2.json" |>                         # Change the track
@@ -180,7 +183,7 @@ key_templates <-
   ) |>
   ggplot(aes(x = time, y = name, fill = d)) + 
   geom_raster() +
-  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  scale_fill_viridis_c(guide = guide_legend(title = 'Distance')) +               # Change the colours?
   labs(x = "Time (s)", y = "Keygram 'Hey joe'", fill = NULL) +
   theme_classic()                                      # Change the theme?
 ```
@@ -197,7 +200,7 @@ key_templates <-
   ) |>
   ggplot(aes(x = time, y = name, fill = d)) + 
   geom_raster() +
-  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  scale_fill_viridis_c(guide = guide_legend(title = 'Distance')) +               # Change the colours?
   labs(x = "Time (s)", y = "Keygram 'AI jazz'", fill = NULL) +
   theme_classic() 
 ```
@@ -205,16 +208,16 @@ key_templates <-
 #### Chordogram of "Hey Joe" - jimi Hendrix
 
 ```{r}
-"features/jasper-v-1.json" |> 
+"features/jasper-v-2.json" |> 
   compmus_chroma(norm = "identity") |> 
   compmus_match_pitch_templates(
     chord_templates,         # Change to chord_templates if desired
-    norm = "identity",       # Try different norms (and match it with what you used in `compmus_chroma`)
-    distance = "cosine"   # Try different distance metrics
+    norm = "manhattan",       # Try different norms (and match it with what you used in `compmus_chroma`)
+    distance = "manhattan"   # Try different distance metrics
   ) |>
   ggplot(aes(x = time, y = name, fill = d)) + 
   geom_raster() +
-  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  scale_fill_viridis_c(guide = guide_legend(title = 'Distance')) +               # Change the colours?
   labs(x = "Time (s)", y = "Keygram 'Hey joe'", fill = NULL) +
   theme_classic()
 ```
@@ -231,7 +234,7 @@ key_templates <-
   ) |>
   ggplot(aes(x = time, y = name, fill = d)) + 
   geom_raster() +
-  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  scale_fill_viridis_c(guide = guide_legend(title = 'Distance')) +               # Change the colours?
   labs(x = "Time (s)", y = "Keygram 'Hey joe'", fill = NULL) +
   theme_classic()
 ```
