@@ -239,7 +239,7 @@ key_templates <-
   theme_classic()
 ```
 
-### Tempograms
+### Week 11, novelty and tempograms
 
 #### energy_novelty jimi hendrix
 
