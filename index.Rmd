@@ -239,7 +239,7 @@ key_templates <-
   theme_classic()
 ```
 
-### Week 11, novelty and tempograms
+### Week 11, novelty
 
 #### energy_novelty jimi hendrix
 
@@ -263,6 +263,8 @@ key_templates <-
   labs(x = "Time (s)", y = "Spectral Novelty")
 ```
 
+### week 11, tempograms
+
 #### tempogram jimi hendrix cyclic = FALSE
 
 ```{r}
@@ -274,6 +276,8 @@ key_templates <-
   labs(x = "Time (s)", y = "Tempo (BPM)") +
   theme_classic()
 ```
+
+***
 
 #### tempogram Jimi Hendrix cyclic = TRUE
 
