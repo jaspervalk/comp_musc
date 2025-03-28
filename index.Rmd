@@ -82,7 +82,7 @@ key_templates <- tribble(
 
 ```
 
-Introduction {.storyboard}
+1: Introduction {.storyboard}
 ====================================================
 
 ### Overview
@@ -111,11 +111,6 @@ cat('
   <source src="jasper-v-1.mp3" type="audio/mp3">
   Your browser does not support the audio element.
 </audio>
-')
-```
-
-```{r,  results='asis', echo=FALSE}
-cat('
 <h4>Listen: Hey Joe (Hendrix)</h4>
 <audio controls>
   <source src="jasper-v-2.mp3" type="audio/mp3">
@@ -125,7 +120,7 @@ cat('
 ```
 
 
-Track-Level Summary {.storyboard}
+2: Track-Level Summary {.storyboard}
 ====================================================
 
 ### Feature Correlation Matrix
@@ -155,7 +150,7 @@ ggplot(compmus2025, aes(x = danceability, y = instrumentalness)) +
   labs(title = "Danceability vs Instrumentalness")
 ```
 
-AI Jazz (Track 1) {.storyboard}
+3: AI Jazz (Track 1) {.storyboard}
 ====================================================
 
 ### Chromagram
@@ -181,6 +176,18 @@ AI Jazz (Track 1) {.storyboard}
 
 ```
 
+### Cepstrogram – AI Jazz
+
+```{r}
+"features/jasper-v-2.json" |> 
+  compmus_mfccs(norm = "identity") |> 
+  ggplot(aes(x = time, y = mfcc, fill = value)) + 
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "MFCC Coefficient", title = "Cepstrogram – Hendrix") +
+  theme_classic()
+```
+
 
 ### Spectral Novelty
 ```{r}
@@ -189,6 +196,18 @@ AI Jazz (Track 1) {.storyboard}
   geom_line(color = "#FFDE59") +
   theme_minimal() +
   labs(x = "Time (s)", y = "Spectral Novelty")
+```
+
+### Keygram
+```{r}
+"features/jasper-v-1.json" |> 
+  compmus_chroma(norm = "euclidean") |> 
+  compmus_match_pitch_templates(key_templates, norm = "euclidean", distance = "angular") |> 
+  ggplot(aes(x = time, y = name, fill = d)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Key") +
+  theme_classic()
 ```
 
 ### Chroma Self-Similarity
@@ -229,7 +248,7 @@ AI Jazz (Track 1) {.storyboard}
   theme_classic()
 ```
 
-Hey Joe – Hendrix (Track 2) {.storyboard}
+4: Hey Joe – Hendrix (Track 2) {.storyboard}
 ====================================================
 ### Chromagram
 ```{r}
@@ -239,6 +258,20 @@ Hey Joe – Hendrix (Track 2) {.storyboard}
   scale_y_continuous(breaks = 0:11, labels = LETTERS[1:12]) +
   scale_fill_viridis_c(guide = "none") +
   theme_classic()
+```
+
+### Chordogram – Hendrix
+```{r}
+
+"features/jasper-v-2.json" |> 
+  compmus_chroma(norm = "identity") |> 
+  compmus_match_pitch_templates(chord_templates, norm = "identity", distance = "cosine") |> 
+  ggplot(aes(x = time, y = name, fill = d)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Chord", title = "Chordogram – Hendrix") +
+  theme_classic()
+
 ```
 
 ### Cepstrogram – Hendrix
@@ -275,19 +308,6 @@ Hey Joe – Hendrix (Track 2) {.storyboard}
   theme_classic()
 ```
 
-### Chordogram – Hendrix
-```{r}
-
-"features/jasper-v-2.json" |> 
-  compmus_chroma(norm = "identity") |> 
-  compmus_match_pitch_templates(chord_templates, norm = "identity", distance = "cosine") |> 
-  ggplot(aes(x = time, y = name, fill = d)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Chord", title = "Chordogram – Hendrix") +
-  theme_classic()
-
-```
 
 ### Chroma Self-Similarity
 ```{r}
@@ -312,7 +332,19 @@ Hey Joe – Hendrix (Track 2) {.storyboard}
   theme_classic()
 ```
 
-Comparative Clustering {.storyboard}
+### Timbre Self-Similarity
+```{r}
+"features/jasper-v-2.json" |> 
+  compmus_mfccs(norm = "identity") |> 
+  compmus_self_similarity(feature = mfcc, distance = "euclidean") |> 
+  ggplot(aes(x = xtime, y = ytime, fill = d)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = NULL) +
+  theme_classic()
+```
+
+5: Comparative Clustering {.storyboard}
 ====================================================
 
 ### Dendrogram (Complete Linkage)
@@ -336,24 +368,8 @@ heatmaply(
 )
 ```
 
-Conclusion {.storyboard}
-====================================================
 
-### Final Thoughts
-- **AI Jazz** displays smoother energy flow and tonal center variety. Its novelty and tempo are more uniform.
-- **Hendrix** features dramatic energy shifts and harmonic richness. Self-similarity matrices show strong structural recurrence.
-- Clustering confirms they belong to distinct musical regions in the corpus.
-
-The contrast between the AI-generated jazz track and Hey Joe by Jimi Hendrix paints a clear picture of two very different musical approaches—one shaped by algorithmic predictability and the other by human expressiveness. The AI Jazz track displays a smooth, continuous flow with relatively uniform energy and a stable tonal center. The novelty functions reveal a lack of sharp transitions, which suggests that the structure is intentionally restrained, likely following a learned pattern of what “relaxed” jazz should sound like. This consistency contributes to a calm and ambient vibe, but also points to a limited dynamic range.
-
-On the other hand, Hendrix’s Hey Joe presents a more organic and expressive musical landscape. The energy novelty curve features dramatic peaks and valleys, aligning with moments of instrumental intensity and vocal delivery. The keygram shows shifts that suggest real-time modulation or expressive deviations from a strict tonal center. In the chroma and timbre self-similarity matrices, we see pronounced diagonal structures, highlighting recurring themes and motifs—hallmarks of intentional musical phrasing and narrative.
-
-When placed in the broader context of the class corpus, clustering clearly places these tracks in separate sonic neighborhoods. The AI jazz track clusters near instrumental, lower-arousal tracks with moderate tempo and high smoothness, while Hey Joe stands apart—its position influenced by a more dynamic interplay of arousal, valence, and tempo. It resonates more closely with expressive human performances that vary across multiple musical dimensions.
-
-Overall, this analysis reveals how AI can effectively mimic stylistic elements—structure, tone, even genre-specific features—but still falls short of delivering the nuanced spontaneity that comes with human musicianship. Hendrix’s track reminds us that imperfections, tension, and surprise are not flaws in music—they’re often the most memorable parts.
-
-
-Cross-Track Feature Comparison {.storyboard}
+6: Cross-Track Feature Comparison {.storyboard}
 ====================================================
 
 ### Interactive Valence & Tempo Comparison
@@ -395,7 +411,7 @@ bind_rows(energy_ai, energy_hj) |>
 ```
 
 
-Track Similarity Summary {.storyboard}
+7: Track Similarity Summary {.storyboard}
 ====================================================
 
 ### Euclidean Distance Table (Top Matches)
@@ -422,7 +438,24 @@ compmus2025 |>
   tab_header(title = "Feature Summary: AI Jazz vs Hendrix")
 ```
 
-Thank You {.storyboard}
+8: Conclusion {.storyboard}
+====================================================
+
+### Final Thoughts
+- **AI Jazz** displays smoother energy flow and tonal center variety. Its novelty and tempo are more uniform.
+- **Hendrix** features dramatic energy shifts and harmonic richness. Self-similarity matrices show strong structural recurrence.
+- Clustering confirms they belong to distinct musical regions in the corpus.
+
+The contrast between the AI-generated jazz track and Hey Joe by Jimi Hendrix paints a clear picture of two very different musical approaches—one shaped by algorithmic predictability and the other by human expressiveness. The AI Jazz track displays a smooth, continuous flow with relatively uniform energy and a stable tonal center. The novelty functions reveal a lack of sharp transitions, which suggests that the structure is intentionally restrained, likely following a learned pattern of what “relaxed” jazz should sound like. This consistency contributes to a calm and ambient vibe, but also points to a limited dynamic range.
+
+On the other hand, Hendrix’s Hey Joe presents a more organic and expressive musical landscape. The energy novelty curve features dramatic peaks and valleys, aligning with moments of instrumental intensity and vocal delivery. The keygram shows shifts that suggest real-time modulation or expressive deviations from a strict tonal center. In the chroma and timbre self-similarity matrices, we see pronounced diagonal structures, highlighting recurring themes and motifs—hallmarks of intentional musical phrasing and narrative.
+
+When placed in the broader context of the class corpus, clustering clearly places these tracks in separate sonic neighborhoods. The AI jazz track clusters near instrumental, lower-arousal tracks with moderate tempo and high smoothness, while Hey Joe stands apart—its position influenced by a more dynamic interplay of arousal, valence, and tempo. It resonates more closely with expressive human performances that vary across multiple musical dimensions.
+
+Overall, this analysis reveals how AI can effectively mimic stylistic elements—structure, tone, even genre-specific features—but still falls short of delivering the nuanced spontaneity that comes with human musicianship. Hendrix’s track reminds us that imperfections, tension, and surprise are not flaws in music—they’re often the most memorable parts.
+
+
+9: Thank You {.storyboard}
 ====================================================
 
 ### Reflection
@@ -435,5 +468,4 @@ Using chroma-based self-similarity gave me new insight into how repetition manif
 - Use supervised models to predict genre or composer
 
 ---
-*Prepared for the Computational Musicology 2025 final portfolio presentation.*
 
