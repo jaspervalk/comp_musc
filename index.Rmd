@@ -223,7 +223,6 @@ ggplot(compmus2025, aes(x = danceability, y = instrumentalness)) +
 
 ```
 
-
 ### Tempogram
 ```{r}
 "features/jasper-v-1.json" |> 
@@ -286,7 +285,6 @@ ggplot(compmus2025, aes(x = danceability, y = instrumentalness)) +
   theme_classic()
 ```
 
-
 ### Energy Novelty
 ```{r}
 "features/jasper-v-2.json" |> compmus_energy_novelty() |> 
@@ -307,7 +305,6 @@ ggplot(compmus2025, aes(x = danceability, y = instrumentalness)) +
   labs(x = "Time (s)", y = "Key") +
   theme_classic()
 ```
-
 
 ### Chroma Self-Similarity
 ```{r}
@@ -357,6 +354,9 @@ cluster_juice <- recipe(filename ~ arousal + danceability + instrumentalness + t
 compmus_dist <- dist(cluster_juice, method = "euclidean")
 compmus_dist |> hclust(method = "complete") |> dendro_data() |> ggdendrogram()
 ```
+***
+**Dendogram from complete linkage**
+This block performs hierarchical clustering using several acoustic features: arousal, danceability, instrumentalness, tempo, and valence. The data is first standardized to ensure all features contribute equally, and then Euclidean distance is used to calculate how similar the tracks are to each other. The resulting dendrogram offers a visual overview of these relationships, revealing how tracks are grouped based on shared musical characteristics. This allows us to see whether the AI-generated jazz track and the Hendrix track fall into distinct clusters or share similarities with other songs in the dataset.
 
 ### Heatmap of Feature Profiles
 ```{r}
@@ -367,7 +367,8 @@ heatmaply(
   dist_method = "euclidean"
 )
 ```
-
+***
+The heatmap displays a visual representation of the standardized feature values for each track, with clustering applied both to rows (tracks) and columns (features). It uses the same Euclidean distance and complete linkage method as the dendrogram, allowing us to identify patterns in how tracks relate to one another across multiple dimensions. By examining the color gradients, we can quickly spot which tracks share similar acoustic profiles and how distinct the AI Jazz and Hendrix tracks are compared to the rest of the dataset. This helps reinforce the findings from the dendrogram with a more detailed, feature-level perspective.
 
 6: Cross-Track Feature Comparison {.storyboard}
 ====================================================
